@@ -3,7 +3,7 @@ from django.apps import apps
 from django.views import View
 from django.urls import reverse
 
-from hexlet_django_blog.article.models import Article
+from hexlet_django_blog.articles.models import Article
 
 
 #class ArticleIndexView(View):
@@ -26,16 +26,28 @@ from hexlet_django_blog.article.models import Article
 #            )
 
 
-class ArticleIndexView(View):
-    app_config = apps.get_app_config('articles')
-    app_name = app_config.name
+# class ArticleIndexView(View):
+#     app_config = apps.get_app_config('articles')
+#     app_name = app_config.name
+# 
+#     def get(self, request, *args, **kwargs):
+#         return redirect(
+#             reverse(
+#                 'article_detail',
+#                 kwargs={'article_id': 42, 'tags': 'python'}
+#             )
+#         )
 
+
+class IndexView(View):
     def get(self, request, *args, **kwargs):
-        return redirect(
-            reverse(
-                'article_detail',
-                kwargs={'article_id': 42, 'tags': 'python'}
-            )
+        articles = Article.objects.all()[:15]
+        return render(
+            request,
+            "articles/index.html",
+            context={
+                "articles": articles,
+            },
         )
 
 
