@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.apps import apps
 from django.views import View
 from django.urls import reverse
@@ -51,15 +51,27 @@ class IndexView(View):
         )
 
 
-def articles_detail(request, article_id=None, tags=None):
-    return render(
-        request,
-        'articles/detail.html', 
-        context={
-            'article_id': article_id,
-            'tags': tags,
-        }
-    )
+class ArticleView(View):
+    def get(self, request, *args, **kwargs):
+        article = get_object_or_404(Article, id=kwargs["id"])
+        return render(
+            request,
+            "articles/show.html",
+            context={
+                "article": article,
+            },
+        )
+
+
+# def articles_detail(request, article_id=None, tags=None):
+#     return render(
+#         request,
+#         'articles/detail.html', 
+#         context={
+#             'article_id': article_id,
+#             'tags': tags,
+#         }
+#     )
 
 
 
